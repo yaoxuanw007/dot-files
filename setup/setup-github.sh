@@ -7,8 +7,11 @@
 #   email=YOUR_EMAIL
 git config --global --edit
 
+if [ -z "$EMAIL" ]; then
+  read -p "Enter your email: " EMAIL
+fi
 # generate ssh key
-ssh-keygen -t rsa -C YOUR_EMAIL
+ssh-keygen -t rsa -C $EMAIL
 
 # start ssh-agent
 eval "$(ssh-agent -s)"
