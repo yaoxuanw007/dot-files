@@ -25,10 +25,9 @@ fi
 grep -iq "pathogen" ~/.vimrc
 if [ $? -ne 0 ]; then
   sed -i '1 i\
-  " Pathogen\
-  call pathogen#infect()\
-  call pathogen#helptags()\
-  ' ~/.vimrc
+call pathogen#infect()\
+call pathogen#helptags()\
+' ~/.vimrc
 fi
 
 ## setup nerdtree
@@ -42,10 +41,9 @@ fi
 grep -iq "nerdtree" ~/.vimrc
 if [ $? -ne 0 ]; then
   sed -i '1 i\
-  " NERDTree\
-  autocmd vimenter * NERDTree\
-  autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTreeType == "primary") | q | endif\
-  map <C-n> :NERDTreeToggle<CR>\
-  ' ~/.vimrc
+autocmd vimenter * NERDTree\
+autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTreeType == "primary") | q | endif\
+map <C-n> :NERDTreeToggle<CR>\
+' ~/.vimrc
 fi
 
