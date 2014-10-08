@@ -76,7 +76,7 @@ grep -iq "supertab" ~/.vimrc
 if [ $? -ne 0 ]; then
   sed -i '$ a\
 " supertab\
-let g:SuperTabDefaultCompletionType = "context"\
+let g:SuperTabContextDefaultCompletionType = "<c-n>"\
 ' ~/.vimrc
 fi
 
