@@ -1,7 +1,9 @@
 #!/bin/bash
 
-sudo curl -sL https://rpm.nodesource.com/setup | sudo bash -
-sudo yum install -y nodejs
+[ "`whoami`" != "root" ] && echo "need root" && exit 1
+
+curl -sL https://rpm.nodesource.com/setup | bash -
+yum install -y nodejs
 
 # install build tools
-sudo yum groupinstall 'Development Tools'
+yum groupinstall 'Development Tools'
