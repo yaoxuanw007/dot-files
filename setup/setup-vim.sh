@@ -5,6 +5,25 @@ source $(dirname $0)/setup.conf
 ## setup vim
 sudo yum --enablerepo=remi --enablerepo=epel install vim-enhanced
 
+# utilities to install vim plugin
+function install_plugin() {
+  local bundle="$HOME/.vim/bundle" 
+  local name=$1
+  local url=$2
+
+  if [ ! -d "$bundle/$name" ]; then
+    pushd $bundle
+    git clone $url $name
+    popd
+  fi
+}
+
+function check_config() {
+  local name=$1
+
+  grep -iq "$name" ~/.vimrc
+}
+
 ## setup basic vimrc
 if [ ! -f "$HOME/.vimrc" ]; then
   if [ -f "$CONFIG_DIR/vimrc" ]; then
@@ -22,14 +41,10 @@ if [ ! -f "$HOME/.vim/autoload/pathogen.vim" ]; then
 fi
 
 ## setup nerdtree
-if [ ! -d "$HOME/.vim/bundle/nerdtree" ]; then
-  pushd ~/.vim/bundle
-  git clone git://github.com/scrooloose/nerdtree.git nerdtree
-  popd
-fi
+install_plugin "nerdtree" "git://github.com/scrooloose/nerdtree.git"
 
 # https://github.com/scrooloose/nerdtree
-grep -iq "nerdtree" ~/.vimrc
+check_config "nerdtree"
 if [ $? -ne 0 ]; then
   sed -i '$ a\
 \
@@ -43,20 +58,12 @@ fi
 # refer to http://mirnazim.org/writings/vim-plugins-i-use/
 # delmitmate
 # :help delimitMate
-if [ ! -d "$HOME/.vim/bundle/delmitmate" ]; then
-  pushd ~/.vim/bundle
-  git clone git://github.com/Raimondi/delimitMate.git delmitmate
-  popd
-fi
+install_plugin "delimitmate" "git://github.com/Raimondi/delimitMate.git"
 
 # closetag 
-if [ ! -d "$HOME/.vim/bundle/closetag" ]; then
-  pushd ~/.vim/bundle
-  git clone git://github.com/docunext/closetag.vim.git closetag
-  popd
-fi
+install_plugin "closetag" "git://github.com/docunext/closetag.vim.git"
 
-grep -iq "closetag" ~/.vimrc
+check_config "closetag"
 if [ $? -ne 0 ]; then
   sed -i '$ a\
 " closetag\
@@ -66,13 +73,9 @@ autocmd FileType html,xhtml,xml,htmldjango,jinjahtml,eruby,mako source ~/.vim/bu
 fi
 
 # superTab
-if [ ! -d "$HOME/.vim/bundle/supertab" ]; then
-  pushd ~/.vim/bundle
-  git clone git://github.com/vim-scripts/supertab.git supertab
-  popd
-fi
+install_plugin "supertab" "git://github.com/vim-scripts/supertab.git"
 
-grep -iq "supertab" ~/.vimrc
+check_config "supertab"
 if [ $? -ne 0 ]; then
   sed -i '$ a\
 " supertab\
@@ -82,14 +85,10 @@ fi
 
 # tagbar
 # http://blog.sensible.io/2014/05/09/supercharge-your-vim-into-ide-with-ctags.html
-if [ ! -d "$HOME/.vim/bundle/tagbar" ]; then
-  pushd ~/.vim/bundle
-  sudo yum install ctags
-  git clone git://github.com/majutsushi/tagbar.git tagbar
-  popd
-fi
+sudo yum install ctags
+install_plugin "tagbar" "git://github.com/majutsushi/tagbar.git"
 
-grep -iq "tagbar" ~/.vimrc
+check_config "tagbar"
 if [ $? -ne 0 ]; then
   sed -i '$ a\
 " tagbar\
@@ -99,13 +98,9 @@ nnoremap <leader>l :TagbarToggle<CR>\
 fi
 
 # solarized
-if [ ! -d "$HOME/.vim/bundle/solarized" ]; then
-  pushd ~/.vim/bundle
-  git clone git://github.com/altercation/vim-colors-solarized.git solarized
-  popd
-fi
+install_plugin "solarized" "git://github.com/altercation/vim-colors-solarized.git"
 
-grep -iq "solarized" ~/.vimrc
+check_config "solarized"
 if [ $? -ne 0 ]; then
   sed -i '$ a\
 " solarized\
@@ -118,8 +113,21 @@ colorscheme solarized\
 ' ~/.vimrc
 fi
 
+# commentary
+install_plugin "commentary" "git://github.com/tpope/vim-commentary.git"
+
+check_config "commentary"
+if [ $? -ne 0 ]; then
+  sed -i '$ a\
+" commentary\
+" use backspace in normal and virtual mode\
+nmap <BS> gcc\
+vmap <BS> gc\
+' ~/.vimrc
+fi
+
 # http://www.vim.org/scripts/script.php?script_id=2332
-grep -iq "pathogen" ~/.vimrc
+check_config "pathogen"
 if [ $? -ne 0 ]; then
   sed -i '1 i\
 " pathogen\
