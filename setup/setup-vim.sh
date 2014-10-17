@@ -126,6 +126,27 @@ vmap <BS> gc\
 ' ~/.vimrc
 fi
 
+# node.vim
+install_plugin "node" "https://github.com/pangloss/vim-javascript.git"
+
+# esformatter
+# refer: https://gist.github.com/nisaacson/6939960
+which npm >/dev/null
+if [ $? -eq 0 ]; then
+  sudo npm install -g esformatter
+fi
+
+check_config "esformatter"
+if [ $? -ne 0 ]; then
+  sed -i '$ a\
+" esformatter\
+" * Indent the whole file, i.e. :%!esformatter\
+" * Indent selected lines, i.e. <leader>es\
+" --- format visually selected JavaScript using esformatter --\
+vnoremap <silent> <leader>es :! esformatter<CR>\
+' ~/.vimrc
+fi
+
 # http://www.vim.org/scripts/script.php?script_id=2332
 check_config "pathogen"
 if [ $? -ne 0 ]; then
